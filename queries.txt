@@ -1,0 +1,23 @@
+
+DELETE from TweetObject where TWEET_ID in (select ID from Tweet where USER_ID in (select ID from TwitterUser where type = 'LEADER'));
+DELETE from Tweet where USER_ID in (select ID from TwitterUser where type = 'LEADER');
+
+DELETE from TweetObject where TWEET_ID in (select ID from Tweet where USER_ID in (select ID from TwitterUser where type = 'LEADER'));
+DELETE from Tweet where USER_ID in (select ID from TwitterUser where LANGUAGE != 'nl' and LOCATION != 'BE');
+
+DELETE from TweetObject where TWEET_ID in (SELECT ID from Tweet where USER_ID in (select ID from TwitterUser where (LANGUAGE <> 'nl' || LANGUAGE IS NULL) and (LOCATION <> 'BE' || LOCATION IS NULL)));
+DELETE from Tweet where USER_ID in (select ID from TwitterUser where (LANGUAGE <> 'nl' || LANGUAGE IS NULL) and (LOCATION <> 'BE' || LOCATION IS NULL));
+DELETE from TwitterUser where (LANGUAGE <> 'nl' || LANGUAGE IS NULL) and (LOCATION <> 'BE' || LOCATION IS NUL
+
+DELETE from TweetObject where TWEET_ID in (SELECT ID from Tweet where USER_ID in (select ID from TwitterUser where LANGUAGE <> 'nl'));
+DELETE from Tweet where USER_ID in (select ID from TwitterUser where LANGUAGE <> 'nl');
+DELETE from TwitterUser where LANGUAGE <> 'nl';
+
+
+
+
+DELETE from TweetObject where TWEET_ID in (SELECT ID from Tweet where USER_ID in (select ID from TwitterUser where name like '%washingtonpost%'));
+DELETE from Tweet where USER_ID in (select ID from TwitterUser where name like '%washingtonpost%');
+DELETE from TwitterUser where name like '%washingtonpost%';
+
+select name, type from TwitterUser where id in (select USER_ID from Tweet where numberoftweets > 50);

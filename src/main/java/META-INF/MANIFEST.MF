@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Class-Path: spring-data-jpa-1.2.0.RELEASE.jar hibernate-core-4.1.8.Fin
+ al.jar log4j-1.2.16.jar slf4j-api-1.6.1.jar spring-context-3.1.2.RELE
+ ASE.jar jackson-core-asl-1.9.11.jar spring-asm-3.1.2.RELEASE.jar hibe
+ rnate-commons-annotations-4.0.1.Final.jar jackson-mapper-asl-1.9.11.j
+ ar spring-core-3.1.2.RELEASE.jar httpclient-4.2.2.jar twitter4j-core-
+ 3.0.2.jar commons-collections-3.2.1.jar commons-codec-1.6.jar jboss-l
+ ogging-3.1.0.GA.jar jsoup-1.7.1.jar spring-aop-3.1.2.RELEASE.jar jcl-
+ over-slf4j-1.6.1.jar twitter4j-stream-3.0.2.jar asm-3.3.1.jar cglib-2
+ .2.2.jar hibernate-entitymanager-4.1.8.Final.jar httpcore-4.2.2.jar s
+ pring-tx-3.1.2.RELEASE.jar spring-data-commons-core-1.4.0.RELEASE.jar
+  spring-orm-3.1.2.RELEASE.jar commons-io-2.4.jar spring-beans-3.1.2.R
+ ELEASE.jar im4java-1.2.0.jar jboss-transaction-api_1.1_spec-1.0.0.Fin
+ al.jar aopalliance-1.0.jar antlr-2.7.7.jar spring-jdbc-3.1.2.RELEASE.
+ jar hibernate-jpa-2.0-api-1.0.1.Final.jar slf4j-log4j12-1.6.6.jar dom
+ 4j-1.6.1.jar jackson-jaxrs-1.9.11.jar aspectjrt-1.6.12.jar spring-exp
+ ression-3.1.2.RELEASE.jar spring-web-3.1.3.RELEASE.jar mysql-connecto
+ r-java-5.1.22.jar javassist-3.15.0-GA.jar commons-logging-1.1.1.jar
+Main-Class: be.virtualsushi.tick5.datatracker.DatatrackerApplication
+
