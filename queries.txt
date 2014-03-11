@@ -20,4 +20,14 @@ DELETE from TweetObject where TWEET_ID in (SELECT ID from Tweet where USER_ID in
 DELETE from Tweet where USER_ID in (select ID from TwitterUser where name like '%washingtonpost%');
 DELETE from TwitterUser where name like '%washingtonpost%';
 
+DELETE from TweetObject where TWEET_ID in (SELECT ID from Tweet where USER_ID in (select ID from TwitterUser where SCREEN_NAME = 'bla_bla'));
+DELETE from Tweet where USER_ID in (select ID from TwitterUser where SCREEN_NAME = 'bla_bla');
+DELETE from TwitterUser where SCREEN_NAME = 'bla_bla';
+
+DELETE from TweetObject where TWEET_ID in (SELECT ID from Tweet where USER_ID = 18424289);
+DELETE from Tweet where USER_ID = 18424289;
+DELETE from TwitterUser where ID = 18424289;
+
 select name, type from TwitterUser where id in (select USER_ID from Tweet where numberoftweets > 50);
+
+select t.TWEET_TEXT, t.RATE, t.QUANTITY, tu.SCREEN_NAME, tu.LOCATION, tu.LANGUAGE from TwitterUser tu join Tweet t on t.USER_ID=tu.ID where t.TWEET_STATE='NOT_RATED';
