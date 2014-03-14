@@ -57,16 +57,20 @@ public class TimerServiceImpl implements TimerService {
 	public void analyse() {
 		String aws_key = createAWSKey(0);
 		dataAnalysisService.analyseTweets(aws_key);
+		List<Tweet> bestsellerTweets = tweetRepository.getToppers();
+		for (Tweet bestsellerTweet : bestsellerTweets) {
+			imageFilter.applySquareFilter(bestsellerTweet.getImage());
+		}
 	}
 
-	@Override
+	/*@Override
 	@Scheduled(cron = "0 12,27,42,57 * * * *")
 	public void createSquaredImages() {
 		List<Tweet> bestsellerTweets = tweetRepository.getToppers();
 		for (Tweet bestsellerTweet : bestsellerTweets) {
 			imageFilter.applySquareFilter(bestsellerTweet.getImage());
 		}
-	}
+	}*/
 
 	@Override
 	@Scheduled(cron = "0 13,28,43,58 * * * *")
@@ -75,6 +79,12 @@ public class TimerServiceImpl implements TimerService {
 		for (Tweet bestsellerTweet : bestsellerTweets) {
 			imageFilter.applyFancyFilters(bestsellerTweet.getImage(), filterset);
 		}
+	}
+
+	@Override
+	@Scheduled(cron = "0 1,16,31,46 * * * *")
+	public void retweet() {
+		dataAnalysisService.retweet();
 	}
 
 	@Override

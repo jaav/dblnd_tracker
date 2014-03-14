@@ -8,6 +8,6 @@ public interface Tick5StatusListener {
 
 	void listen(List<TwitterUser> followings);
 	void halt();
-	void restart(List<TwitterUser> followings);
+	//void restart(List<TwitterUser> followings);
 
 }

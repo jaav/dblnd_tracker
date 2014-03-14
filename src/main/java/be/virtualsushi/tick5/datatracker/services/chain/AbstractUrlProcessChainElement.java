@@ -14,7 +14,7 @@ public abstract class AbstractUrlProcessChainElement extends AbstractProcessChai
 	@Override
 	protected boolean canProcess(Document object) {
 		foundElements = object.select(getSelector());
-		log.warn("Can I process for "+getSelector()+"? "+(!foundElements.isEmpty()));
+		log.debug("Can I process for "+getSelector()+"? "+(!foundElements.isEmpty()));
 		return !foundElements.isEmpty();
 	}
 

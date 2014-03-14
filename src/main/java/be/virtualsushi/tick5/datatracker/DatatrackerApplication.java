@@ -33,20 +33,18 @@ public class DatatrackerApplication {
 	public static void main(String[] args) {
 		try {
 			ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DatatrackerApplicationFactory.class);
-			boolean init = false;
-			if(args!=null && args.length>0 && "init".equals(args[0])) init = true;
-			else if(args!=null && args.length==3 && "addlist".equals(args[0])){
+			if(args!=null && args.length==3 && "addlist".equals(args[0])){
 				final DataCreationService dataCreationService = applicationContext.getBean(DataCreationService.class);
 				dataCreationService.addListMembers(args[1], args[2]);
-				return;
 			}
-
-			applicationContext.getBean(DataCreationService.class).startDatatracking(init);
-
-			//Start timer for cleanup job
-			final CleanupService cleanupService = applicationContext.getBean(CleanupService.class);
-			cleanupService.clean(createAWSKey(-4));
+			else{
+				applicationContext.getBean(DataCreationService.class).startDatatracking();
+				//Start timer for cleanup job
+				//final CleanupService cleanupService = applicationContext.getBean(CleanupService.class);
+				//cleanupService.clean(createAWSKey(-4));
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("Datatracker application error:", e);
 		}
 

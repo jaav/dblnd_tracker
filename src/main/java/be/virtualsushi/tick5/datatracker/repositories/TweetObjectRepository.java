@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface TweetObjectRepository extends Tick5Repository<TweetObject> {
 
-	public TweetObject findByValueAndType(String value, TweetObjectTypes type);
+	public List<TweetObject> findByValueAndType(String value, TweetObjectTypes type);
 
 	public List<TweetObject> findByType(TweetObjectTypes type);
 

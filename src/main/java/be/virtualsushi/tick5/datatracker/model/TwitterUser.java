@@ -42,6 +42,15 @@ public class TwitterUser extends CustomIdBaseEntity {
 	@Column(name = "NUMBEROFTWEETS")
 	private int numberoftweets;
 
+	@Column(name = "RTS")
+	private int rts;
+
+	@Column(name = "MAX_FAVS")
+	private int maxFavs;
+
+	@Column(name = "MAX_RTS")
+	private int maxRts;
+
 	@Transient
 	private String backgroundImage;
 
@@ -81,6 +90,14 @@ public class TwitterUser extends CustomIdBaseEntity {
 		this.tweets = tweets;
 	}
 
+	public int getRts() {
+		return rts;
+	}
+
+	public void setRts(int rts) {
+		this.rts = rts;
+	}
+
 	public boolean isListMember() {
 		return listMember;
 	}
@@ -113,16 +130,28 @@ public class TwitterUser extends CustomIdBaseEntity {
 		this.type = type;
 	}
 
-	public int getNumberoftweets() {
+	/*public int getNumberoftweets() {
 		return numberoftweets;
 	}
 
 	public void setNumberoftweets(int numberoftweets) {
 		this.numberoftweets = numberoftweets;
+	}*/
+
+	public int getMaxFavs() {
+		return maxFavs;
 	}
 
-	public void incrementNumberOfTweets(){
-		numberoftweets++;
+	public void setMaxFavs(int maxFavs) {
+		this.maxFavs = maxFavs;
+	}
+
+	public int getMaxRts() {
+		return maxRts;
+	}
+
+	public void setMaxRts(int maxRts) {
+		this.maxRts = maxRts;
 	}
 
 	/*public String getLanguage() {

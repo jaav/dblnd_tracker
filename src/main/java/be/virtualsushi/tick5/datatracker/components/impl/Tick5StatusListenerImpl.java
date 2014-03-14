@@ -9,15 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import twitter4j.DirectMessage;
-import twitter4j.FilterQuery;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.TwitterStream;
-import twitter4j.User;
-import twitter4j.UserList;
-import twitter4j.UserStreamListener;
+import twitter4j.*;
 import be.virtualsushi.tick5.datatracker.components.Tick5StatusListener;
 import be.virtualsushi.tick5.datatracker.model.TwitterUser;
 import be.virtualsushi.tick5.datatracker.services.TweetProcessService;
@@ -40,11 +32,13 @@ public class Tick5StatusListenerImpl implements UserStreamListener, Tick5StatusL
 
 	@Override
 	public void onException(Exception ex) {
-		log.error("Error listening twitter stauses updates.", ex);
+		log.error("Error listening twitter statuses updates.", ex);
 	}
 
 	@Override
 	public void onStatus(Status status) {
+		//log.debug(status.toString());
+		//log.debug("Normal processing of tweet {} from {}", status.getText(), status.getUser().getScreenName());
 		tweetProcessService.processStatus(status, true);
 	}
 
@@ -82,11 +76,11 @@ public class Tick5StatusListenerImpl implements UserStreamListener, Tick5StatusL
 		twitterStream.shutdown();
 	}
 
-	@Override
+	/*@Override
 	public void restart(List<TwitterUser> followings) {
 		halt();
 		listen(followings);
-	}
+	}*/
 
 	@Override
 	public void onDeletionNotice(long directMessageId, long userId) {
@@ -100,6 +94,7 @@ public class Tick5StatusListenerImpl implements UserStreamListener, Tick5StatusL
 
 	@Override
 	public void onFavorite(User source, User target, Status favoritedStatus) {
+		log.debug("Favouriting tweet {} from {}", favoritedStatus.getText(), favoritedStatus.getUser().getScreenName());
 		tweetProcessService.processStatus(favoritedStatus, true);
 	}
 

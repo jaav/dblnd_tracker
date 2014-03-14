@@ -6,7 +6,7 @@ import twitter4j.TwitterException;
 
 public interface DataCreationService {
 
-	void startDatatracking(boolean init) throws TwitterException, InterruptedException, ExecutionException;
+	void startDatatracking() throws TwitterException, InterruptedException, ExecutionException;
 
 	void addListMembers(String tweep, String listName) throws TwitterException;
 

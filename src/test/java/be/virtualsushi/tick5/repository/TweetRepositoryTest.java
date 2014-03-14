@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import be.virtualsushi.tick5.BaseDatatrackerTest;
 import be.virtualsushi.tick5.datatracker.repositories.TweetRepository;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,12 @@ public class TweetRepositoryTest extends BaseDatatrackerTest {
 	@Test
 	public void testGetNotRated() {
 		tweetRepository.getNotRatedTweets();
+	}
+
+	@Test
+	public void testGetTopRatedTweetsForRetweeting(){
+		List<Tweet> tweets = tweetRepository.getTopRatedTweetsForRetweeting();
+		assert tweets.size() > 0;
 	}
 
 

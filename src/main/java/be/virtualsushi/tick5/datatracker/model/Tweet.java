@@ -13,6 +13,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonUnwrapped;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 /**
@@ -45,11 +47,13 @@ import twitter4j.Status;
 
 @JsonIgnoreProperties(value = { "id", "objects", "quantity", "state", "lastModified" })
 @Entity
-public class Tweet extends CustomIdBaseEntity implements HasQuantity {
+public class Tweet extends CustomIdBaseEntity {
+
+	private static final Logger log = LoggerFactory.getLogger(Tweet.class);
 
 	private static final long serialVersionUID = -5452953243879914216L;
 
-	private static final int TWEET_QUANTITY_FACTOR = 2;
+	private static final int TWEET_QUANTITY_FACTOR = 1;
 
 	@JsonUnwrapped
 	@ManyToOne
@@ -64,8 +68,11 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "tweet", fetch = FetchType.EAGER)
 	private List<TweetObject> objects;
 
-	@Column(name = "QUANTITY")
-	private int quantity;
+	@Column(name = "RETWEETS")
+	private int retweets;
+
+	@Column(name = "FAVORITES")
+	private int favorites;
 
 	@Column(name = "TWEET_STATE")
 	@Enumerated(EnumType.STRING)
@@ -84,11 +91,14 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 	@Column(name = "STYLE")
 	private String style;
 
-	@Column(name = "LANGUAGE")
-	private String language;
+	@Column(name = "TWEEP")
+	private String tweep;
 
-	@Column(name = "LOCATION")
-	private String location;
+	@Column(name = "RETWEETED")
+	private Boolean retweeted;
+
+	@Column(name = "PUBLISHED")
+	private Boolean published;
 
 	public String getText() {
 		return text;
@@ -106,18 +116,36 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 		this.user = user;
 	}
 
-	@Override
-	public void increaseQuantity(int amount) {
-		quantity += amount;
+	public int getRetweets() {
+		return retweets;
 	}
 
-	@Override
-	public int getQuantity() {
-		return quantity;
+	public void setRetweets(int retweets) {
+		this.retweets = retweets;
 	}
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public int getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(int favorites) {
+		this.favorites = favorites;
+	}
+
+	public Boolean getRetweeted() {
+		return retweeted;
+	}
+
+	public void setRetweeted(Boolean retweeted) {
+		this.retweeted = retweeted;
+	}
+
+	public Boolean getPublished() {
+		return published;
+	}
+
+	public void setPublished(Boolean published) {
+		this.published = published;
 	}
 
 	public void addObject(TweetObject object) {
@@ -146,17 +174,13 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 	public static Tweet fromStatus(Status status, TwitterUser user) {
 		Tweet tweet = new Tweet();
 		tweet.setId(status.getId());
-		StringBuilder tweetTextBuilder = new StringBuilder();
-		/*String text = status.getText();
-		for (int i = 0; i < text.length(); i++) {
-			char ch = text.charAt(i);
-			if (!Character.isHighSurrogate(ch) && !Character.isLowSurrogate(ch)) {
-				tweetTextBuilder.append(ch);
-			}
-		}
-		tweet.setText(tweetTextBuilder.toString());*/
 		tweet.setText(status.getText());
 		tweet.setUser(user);
+		tweet.setTweep(user.getScreenName());
+		tweet.setRecencyFactor(1);
+		tweet.setRetweeted(false);
+		tweet.setPublished(false);
+		tweet.setFavorites(status.getFavoriteCount());
 		//tweet.setLanguage(user.getLanguage());
 		//tweet.setLocation(user.getLocation());
 		return tweet;
@@ -176,6 +200,14 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 
 	public void setRate(int rate) {
 		this.rate = rate;
+	}
+
+	public String getTweep() {
+		return tweep;
+	}
+
+	public void setTweep(String tweep) {
+		this.tweep = tweep;
 	}
 
 	public boolean hasImage() {
@@ -238,10 +270,6 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 		return result;
 	}
 
-	public int getRawRate() {
-		return getQuantity() * TWEET_QUANTITY_FACTOR;
-	}
-
 	@JsonProperty("image")
 	public String getImage() {
 		return image;
@@ -265,21 +293,5 @@ public class Tweet extends CustomIdBaseEntity implements HasQuantity {
 
 	public void setStyle(String style) {
 		this.style = style;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 }

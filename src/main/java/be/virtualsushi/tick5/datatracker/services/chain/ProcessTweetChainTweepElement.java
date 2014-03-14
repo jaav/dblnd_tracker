@@ -18,17 +18,17 @@ public class ProcessTweetChainTweepElement extends AbstractProcessChainElement<T
 
 	@Override
 	protected boolean canProcess(Tweet tweet) {
-		log.warn("There was NO URL object attached to the tweet. Now checking if an image can be found in the author of this tweet.");
+		log.debug("There was NO URL object attached to the tweet. Now checking if an image can be found in the author of this tweet.");
 		if(tweet!=null && tweet.getUser()!=null){
-			log.warn("There is a user in this tweet. His name is "+ tweet.getUser().getScreenName());
-			log.warn("This user's backgroundimage is "+tweet.getUser().getBackgroundImage());
-			log.warn(".. does it contain 'profile_background_images'?");
+			log.debug("There is a user in this tweet. His name is "+ tweet.getUser().getScreenName());
+			log.debug("This user's backgroundimage is "+tweet.getUser().getBackgroundImage());
+			log.debug(".. does it contain 'profile_background_images'?");
 			if(StringUtils.isNotBlank(tweet.getUser().getBackgroundImage()) && tweet.getUser().getBackgroundImage().contains("profile_background_images")){
 				imgUrl = tweet.getUser().getBackgroundImage();
 				return true;
 			}
-			log.warn("There was no background image. Is there a profile image?");
-			log.warn("Profile image = "+tweet.getUser().getProfileImage());
+			log.debug("There was no background image. Is there a profile image?");
+			log.debug("Profile image = "+tweet.getUser().getProfileImage());
 			if(StringUtils.isNotBlank(tweet.getUser().getProfileImage())){
 				imgUrl = tweet.getUser().getProfileImage();
 				return true;
@@ -40,7 +40,7 @@ public class ProcessTweetChainTweepElement extends AbstractProcessChainElement<T
 
 	@Override
 	protected String doProcess(Tweet object) {
-		log.warn("Processing image "+imgUrl);
+		log.debug("Processing image "+imgUrl);
 		return imgUrl;
 	}
 

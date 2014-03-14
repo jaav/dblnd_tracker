@@ -13,9 +13,9 @@ public class TweetObject extends BaseEntity implements HasQuantity {
 
 	private static final long serialVersionUID = 2576971152325807097L;
 
-	private static final int IMAGE_QUANTITY_FACTOR = 2;
-	private static final int URL_QUANTITY_FACTOR = 1;
-	private static final int HASHTAG_QUANTITY_FACTOR = 1;
+	private static final double IMAGE_QUANTITY_FACTOR = 2.0;
+	private static final double URL_QUANTITY_FACTOR = 3.0;
+	private static final double HASHTAG_QUANTITY_FACTOR = 0.0;
 
 	@JsonUnwrapped
 	@ManyToOne
@@ -71,7 +71,7 @@ public class TweetObject extends BaseEntity implements HasQuantity {
 		quantity += amount;
 	}
 
-	public int getQuantityFactor() {
+	public double getQuantityFactor() {
 		switch (type) {
 		case IMAGE:
 			return IMAGE_QUANTITY_FACTOR;

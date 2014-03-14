@@ -47,7 +47,7 @@ public class CleanupServiceImpl implements CleanupService {
 			// keep image files for 48 hours
 			long before = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000;
 			long after = System.currentTimeMillis() - 4 * 24 * 60 * 60 * 1000;
-			return file.lastModified() < before && file.lastModified() > after && !file.getName().startsWith("no_image");
+			return file.lastModified() < before && file.lastModified() > after && !file.getName().startsWith("no_image") && !file.getName().startsWith("sponsor");
 		}
 	};
 
@@ -93,6 +93,16 @@ public class CleanupServiceImpl implements CleanupService {
 		}
 		try {
 			File imagesFolder = new File(imagesDirectoryName);
+			File[] files = imagesFolder.listFiles(multiFilter);
+			for (int i = 0; i < files.length; i++) {
+				File file = files[i];
+				file.delete();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			File imagesFolder = new File(imagesDirectoryName+"/datatracker_files");
 			File[] files = imagesFolder.listFiles(multiFilter);
 			for (int i = 0; i < files.length; i++) {
 				File file = files[i];

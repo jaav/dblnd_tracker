@@ -6,7 +6,7 @@ import be.virtualsushi.tick5.datatracker.model.TwitterUser;
 
 public interface TweetProcessService {
 
-	Tweet processStatus(Status status, boolean saveAfterProcess);
+	void processStatus(Status status, boolean saveAfterProcess);
 
 	void deleteTweet(Long tweetId);
 

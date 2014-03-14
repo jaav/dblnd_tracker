@@ -27,7 +27,7 @@ public class ProcessUrlChainCustomElement extends AbstractProcessChainElement<Do
 
 	@Override
 	protected boolean canProcess(Document object) {
-		log.warn("In 'canProcess' and object is not null? "+(object!=null));
+		log.debug("In 'canProcess' and object is not null? "+(object!=null));
 		if(object==null) return false;
 
 		Elements elements = object.select("img");
@@ -38,18 +38,18 @@ public class ProcessUrlChainCustomElement extends AbstractProcessChainElement<Do
 				BufferedImage image = imageDownloader.downloadImageTemporarily(tmpImageUrl);
 				if (image != null && image.getHeight() > MIN_IMAGE_SIZE && image.getWidth() > MIN_IMAGE_SIZE) {
 					imageUrl = tmpImageUrl;
-					log.warn("We have an image!!! "+imageUrl);
+					log.debug("We have an image!!! "+imageUrl);
 					return true;
 				}
 			}
 		}
-		log.warn("We did NOT find an image in "+object.title()+". Now moving to processing tweet author ...");
+		log.debug("We did NOT find an image in "+object.title()+". Now moving to processing tweet author ...");
 		return false;
 	}
 
 	@Override
 	protected String doProcess(Document object) {
-		log.warn("Processing "+object.title());
+		log.debug("Processing "+object.title());
 		return imageUrl;
 		// No luck with images let's ask google for help.
 		/*elements = object.select("title");

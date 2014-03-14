@@ -45,9 +45,7 @@ public class AwsRepositoryTest extends BaseDatatrackerTest {
 		ResponseList<Status> statuses = twitter.getUserTimeline(user.getId(), new Paging(1, 5));
 		List<Tweet> tweets = new ArrayList<Tweet>();
 		for (Status status : statuses) {
-			Tweet tweet = tweetProcessService.processStatus(status, false);
-			tweet.setImage("numb");
-			tweets.add(tweet);
+			tweetProcessService.processStatus(status, false);
 		}
 		//awsRepository.insertTweets(tweets, createAWSKey());
 	}

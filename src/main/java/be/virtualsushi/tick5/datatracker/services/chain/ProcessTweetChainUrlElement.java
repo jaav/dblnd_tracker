@@ -32,13 +32,13 @@ public class ProcessTweetChainUrlElement extends AbstractProcessChainElement<Twe
 		if (result) {
 			try {
 				document = Jsoup.connect(object.getFirstUrlObject().getValue()).get();
-				log.warn("Fetching image from an attached URL object - "+object.getFirstUrlObject().getValue());
+				log.debug("Fetching image from an attached URL object - "+object.getFirstUrlObject().getValue());
 			} catch (IOException e) {
-				log.warn("JSOUP did NOT find the remote document.");
+				log.debug("JSOUP did NOT find the remote document.");
 				return false;
 			}
 		}
-		log.warn("Returning "+result+" in the canProcess method.");
+		log.debug("Returning "+result+" in the canProcess method.");
 		return result;
 	}
 

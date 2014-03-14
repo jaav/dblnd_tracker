@@ -126,7 +126,7 @@ public class ImageFilterImpl implements ImageFilter {
 			String s = commands[i];
 			sb.append(commands[i]).append(" ");
 		}
-		log.debug(sb.toString());
+		log.warn(sb.toString());
 	}
 
 	private boolean applyCropResize(File imageFile, String imageName) {
@@ -151,6 +151,8 @@ public class ImageFilterImpl implements ImageFilter {
 	}
 
 	private boolean exec(String[] command, boolean wait) {
+		showCommand(command);
+
 		Process proc;
 		//String[] env = {"MAGICK_HOME=\"/usr/local/ImageMagick\""};
 
@@ -178,7 +180,6 @@ public class ImageFilterImpl implements ImageFilter {
 				log.error("Error processing "+Arrays.toString(command));
 			}
 		}
-		showCommand(command);
 		return exitStatus == 0;
 	}
 }

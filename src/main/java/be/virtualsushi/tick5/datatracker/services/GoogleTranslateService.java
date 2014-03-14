@@ -13,6 +13,12 @@ public interface GoogleTranslateService {
 
 	public static final String GOOGLE_TRANSLATE_URL_PATTERN = "https://www.googleapis.com/language/translate/v2/detect?key={apiKey}&q={query}";
 
-	String detectLanguage(String... keyWords);
+	String getTrackingLanguage(String content);
+
+	boolean isTrackingCountry(String contents);
+
+	String getTrackingLanguageGoogle(String... keyWords);
+
+	String getTrackingLanguageSimple(String... keyWords);
 
 }
