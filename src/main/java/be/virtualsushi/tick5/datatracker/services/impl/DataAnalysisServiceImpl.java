@@ -53,9 +53,9 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 
 	private static final int GARBAGE_DIVIDER = 10;
 
-	private static final int LEADER_MINIMUM_RETWEETS = 800;
+	private static final int LEADER_MINIMUM_RETWEETS = 2500;
 
-	private static final int LEADER_MINIMUM_FAVORITES = 800;
+	private static final int LEADER_MINIMUM_FAVORITES = 2500;
 
 	private static final Logger log = LoggerFactory.getLogger(DataAnalysisServiceImpl.class);
 
@@ -115,7 +115,7 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 			// Rating tweets.
 			rateTweets(tweets);
 			// Processing top rated tweets.
-			processTopRatedTweets(tweetRepository.getTopRatedTweets(new PageRequest(0, 50, Direction.DESC, "rate")).getContent(), aws_key);
+			processTopRatedTweets(tweetRepository.getTopRatedTweets(new PageRequest(0, 5, Direction.DESC, "rate")).getContent(), aws_key);
 			log.warn("Finished analysis");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,12 +125,12 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 
 	private void processTopRatedTweets(List<Tweet> topRatedTweets, String aws_key) throws InterruptedException, ExecutionException, IOException {
 		log.debug("Top rating a list of {} tweets", topRatedTweets.size());
-		List<Tweet> popularTweets = createPopularTweetsList(topRatedTweets);
-		log.debug("Publishing a list of {} tweets", popularTweets.size());
+		/*List<Tweet> popularTweets = createPopularTweetsList(topRatedTweets);
+		log.debug("Publishing a list of {} tweets", popularTweets.size());*/
 		Map<Long, Future<File>> futureImageFiles = new HashMap<Long, Future<File>>();
 		Map<Long, Tweet> tweetsToPost = new HashMap<Long, Tweet>();
 		long id = System.currentTimeMillis();
-		for (Tweet tweet : popularTweets) {
+		for (Tweet tweet : topRatedTweets) {
 			log.debug("Setting {} to 'published'", tweet.getId());
 			tweetRepository.setPublished(tweet.getId());
 			log.debug("Ok, tweet was set 'published'");
@@ -189,27 +189,30 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 
 	public void retweet(){
 		List<Tweet> tweets = tweetRepository.getTopRatedTweetsForRetweeting();
-		tweets = createPopularTweetsList(tweets);
-
+		//tweets = createPopularTweetsList(tweets);
+		int counter = 0;
 		for (Tweet tweet : tweets) {
-			try {
-				SelfTweet selfTweet = selfTweetRepository.findOne(tweet.getId());
-				if (selfTweet == null) {
-					if (twitterPublish) {
-						twitter.retweetStatus(tweet.getId());
-						log.debug("RETWEETING TWEET {}", tweet.getId());
-					}
-					tweetRepository.setRetweeted(tweet.getId());
-					selfTweet = SelfTweet.fromTweet(tweet);
-					selfTweetRepository.save(selfTweet);
-					}
-			} catch (Exception e) {
-				e.printStackTrace();
+			if(counter<5){
+				try {
+					SelfTweet selfTweet = selfTweetRepository.findOne(tweet.getId());
+					if (selfTweet == null) {
+						if (twitterPublish) {
+							twitter.retweetStatus(tweet.getId());
+							log.debug("RETWEETING TWEET {}", tweet.getId());
+						}
+						tweetRepository.setRetweeted(tweet.getId());
+						selfTweet = SelfTweet.fromTweet(tweet);
+						selfTweetRepository.save(selfTweet);
+						}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				counter++;
 			}
 		}
 	}
 
-	private List<Tweet> createPopularTweetsList(List<Tweet> topRatedTweets) {
+	/*private List<Tweet> createPopularTweetsList(List<Tweet> topRatedTweets) {
 		List<Tweet> popularTweets = new ArrayList<Tweet>();
 		int counter = 0;
 		while (popularTweets.size() < 5 && topRatedTweets.size() > counter) {
@@ -220,15 +223,15 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 				popularTweets.add(tweet);
 		}
 		return popularTweets;
-	}
+	}*/
 
 	private void rateTweets(List<Tweet> tweets) {
 		for (Tweet tweet : tweets) {
 			try {
-				double quantityQuote = tweet.getRetweets() > MINIMUM_RETWEETS ? 2 * tweet.getRetweets() / ((double) tweet.getUser().getMaxRts()) : 0;
+				double quantityQuote = tweet.getRetweets() > MINIMUM_RETWEETS ? 4 * tweet.getRetweets() / ((double) tweet.getUser().getMaxRts()) : 0;
 				log.debug("quantityQuote = {}", quantityQuote);
 
-				double favsQuote = tweet.getFavorites() > MINIMUM_FAVS ? 2 * tweet.getFavorites() / ((double) tweet.getUser().getMaxFavs()) : 0;
+				double favsQuote = tweet.getFavorites() > MINIMUM_FAVS ? 4 * tweet.getFavorites() / ((double) tweet.getUser().getMaxFavs()) : 0;
 				log.debug("favsQuote = {}", favsQuote);
 
 				int subsedizedUrlMultiplicator = 1;
@@ -263,6 +266,13 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 				tweet.setRecencyFactor(tweet.getRecencyFactor() / RECENCY_DIVIDER);
 				tweet.setState(TweetStates.RATED);
 				tweetRepository.rateTweet(tweet.getId(), tweet.getRate(), TweetStates.RATED.name(), tweet.getRecencyFactor());
+
+				if(tweet.getFavorites() > tweet.getUser().getMaxFavs() || tweet.getRetweets() > tweet.getUser().getMaxRts()){
+					tweet.getUser().setMaxFavs(tweet.getFavorites());
+					tweet.getUser().setMaxRts(tweet.getRetweets());
+					twitterUserRepository.save(tweet.getUser());
+				}
+
 			} catch (Exception e) {
 				log.warn("Not rating tweet " + tweet.getId());
 				e.printStackTrace();

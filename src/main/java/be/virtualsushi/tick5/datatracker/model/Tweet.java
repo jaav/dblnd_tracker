@@ -181,6 +181,7 @@ public class Tweet extends CustomIdBaseEntity {
 		tweet.setRetweeted(false);
 		tweet.setPublished(false);
 		tweet.setFavorites(status.getFavoriteCount());
+		tweet.setRetweets(status.getRetweetCount());
 		//tweet.setLanguage(user.getLanguage());
 		//tweet.setLocation(user.getLocation());
 		return tweet;
